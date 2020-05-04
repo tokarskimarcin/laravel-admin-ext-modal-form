@@ -21,6 +21,7 @@ class Modal {
             e.preventDefault();
             that._clearErrors();
             that._disableButtons();
+            that.loading();
             $.ajax({
                 url: form.attr('action'),
                 method: form.attr('method'),
@@ -29,15 +30,34 @@ class Modal {
                 swal(jqXHR.status.toString(), errorThrown, 'error');
             }).success(function (result) {
                 if(result.status){
-
+                    toastr.success(result.message);
+                    that.remove();
                 }else{
                     that._handleErrors(result);
                 }
             }).always(function () {
                 that._enableButtons();
+                that.loading(false);
             });
 
         });
+    }
+
+    loading(isLoading = true){
+        if(isLoading){
+            this.$loading = $('<div>').addClass('modal-backdrop in').append($("<div>").addClass('editableform-loading').css({
+                'position': 'absolute',
+                'top': '50%',
+                'left': '50%',
+                'z-index': '10000'
+            }));
+            this.$el.find('.modal-dialog').append(this.$loading);
+        }else{
+            if(this.$loading){
+                this.$loading.remove();
+            }
+        }
+
     }
 
     _handleReset(){
@@ -99,7 +119,8 @@ class Modal {
             $.globalEval(script.prop('innerHTML'));
         }
         this.modal = this.$el.modal({
-            allowOutsideClick: false
+            backdrop: 'static',
+            keyboard: false
         });
     }
 
