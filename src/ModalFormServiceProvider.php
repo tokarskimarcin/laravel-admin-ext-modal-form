@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\\ModalForm;
+namespace Encore\ModalForm;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -26,8 +26,8 @@ class ModalFormServiceProvider extends ServiceProvider
             );
         }
 
-        $this->app->booted(function () {
-            ModalForm::routes(__DIR__.'/../routes/web.php');
-        });
+//        $this->app->booted(function () {
+//            ModalForm::routes(__DIR__.'/../routes/web.php');
+//        });
     }
 }
