@@ -1,5 +1,5 @@
 <div class="modal fade" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog {!! $size !!}" role="document">
         <div class="modal-content">
             <div class="modal-header box-header with-border">
                 <h3 class="box-title">{{ $form->title() }}</h3>

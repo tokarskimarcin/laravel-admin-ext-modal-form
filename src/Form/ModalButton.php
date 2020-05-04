@@ -30,7 +30,7 @@ class ModalButton implements Renderable
 
     public function render()
     {
-        Admin::script(file_get_contents(public_path('/vendor/laravel-admin-ext/modal-form/js/pull-form.js')));
+        Admin::script(file_get_contents(public_path('/vendor/laravel-admin-ext/modal-form/js/modal-form.js')));
         $attr=$this->formatAttributes();
         return "<a $attr>$this->label</a>";
     }
