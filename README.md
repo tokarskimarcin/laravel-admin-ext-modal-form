@@ -1,11 +1,11 @@
 Modal Form / laravel-admin-extensions
 ![preview](preview.png)
-##Requires
+## Requires
 - "php": ">=7.2.0",
 - "encore/laravel-admin": "~1.6"
 
-##Installation
-###Publishing
+## Installation
+### Publishing
 Execute command below to publish package. 
 It will copy vendor resources to your application public directory.
 ~~~
@@ -13,8 +13,8 @@ php artisan vendor:publish --provider="Encore\ModalForm\ModalFormServiceProvider
 ~~~
 
 
-##Documentation
-###1. Create modal button
+## Documentation
+### 1. Create modal button
 Use Encore\ModalForm\Form\ModalButton class to create modal button. In constructor pass parameters (string $title, string $href)
 ```php
 use Encore\Admin\Layout\Content;
@@ -42,7 +42,7 @@ class HomeController {
     }
 }
 ```
-####Methods
+#### Methods
 ```php
 //overrides classes of html button tag
 $modalButton->setClass('btn-primary');
@@ -59,7 +59,7 @@ $modalButton->setHref('url');
 //returns settled hrefg
 $modalButton->getHref();
 ```
-###2. Form
+### 2. Form
 Use modal form as regular Admin form
 ```php
  new ModalForm(new Administrator(), function (ModalForm $form){
