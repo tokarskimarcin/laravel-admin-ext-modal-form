@@ -2,15 +2,15 @@ let pullingModal = false;
 let modal = null;
 
 class Modal {
-    constructor(content) {
-        this.$el = $(content);
-        this.init();
+    constructor(result) {
+        this.$el = $(result.content);
+        this.init(result);
     }
 
-    init() {
+    init(result) {
         this._handleSubmit();
         this._handleReset();
-        this._show();
+        this._show(result);
         this._handleHide();
     }
 
@@ -29,6 +29,7 @@ class Modal {
                 swal(jqXHR.status.toString(), errorThrown, 'error');
             }).success(function (result) {
                 if(result.status){
+
                 }else{
                     that._handleErrors(result);
                 }
@@ -44,6 +45,7 @@ class Modal {
             this._clearErrors();
         });
     }
+
     _getButtons() {
         return this.$el.find('.btn');
     }
@@ -89,7 +91,13 @@ class Modal {
         });
     }
 
-    _show() {
+    _show(result) {
+        $(document).find('.wrapper').prepend(this.$el);
+        if (typeof result.script != 'object'){
+            var script = $(result.script);
+            this.$el.append(script);
+            $.globalEval(script.prop('innerHTML'));
+        }
         this.modal = this.$el.modal({
             allowOutsideClick: false
         });
@@ -104,7 +112,9 @@ class Modal {
         formGroups.each(function (id, formGroup) {
             formGroup = $(formGroup);
             formGroup.removeClass('has-error');
-            formGroup.find('[for="inputError"]').remove();
+            formGroup.find('[for="inputError"]').each((key, inputError)=>{
+                $(inputError).siblings('br').remove();
+            }).remove();
         });
     }
 
@@ -172,9 +182,7 @@ function modalForm(href) {
 function makeModal(result) {
     result = JSON.parse(result);
     if (result && validate(result)) {
-        modal = new Modal(result.content);
-        if (typeof result.script != 'object')
-            eval(result.script);
+        modal = new Modal(result);
     }
 }
 
