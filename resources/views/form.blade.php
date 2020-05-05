@@ -1,4 +1,6 @@
-<div class="modal fade" role="dialog">
+@extends('modal-form::modal')
+
+@section('content')
     <div class="modal-dialog {!! $size !!}" role="document">
         <div class="modal-content">
             <div class="modal-header box-header with-border">
@@ -51,5 +53,4 @@
             {!! $form->close() !!}
         </div>
     </div>
-    {!! Modal::script() !!}
-</div>
+@endsection
