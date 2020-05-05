@@ -30,10 +30,7 @@ class Builder extends \Encore\Admin\Form\Builder
      */
     public function render():string
     {
-        return json_encode([
-            'content' => view($this->view, $this->getData())->render(),
-            'script' => str_replace('data-exec-on-popstate', 'data-exec-on-modal-load', Admin::script()->render())
-        ]);
+        return view($this->view, $this->getData())->render();
     }
 
     /**

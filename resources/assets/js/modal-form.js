@@ -3,14 +3,14 @@ let modal = null;
 
 class Modal {
     constructor(result) {
-        this.$el = $(result.content);
-        this.init(result);
+        this.$el = $(result);
+        this.init();
     }
 
-    init(result) {
+    init() {
         this._handleSubmit();
         this._handleReset();
-        this._show(result);
+        this._show();
         this._handleHide();
     }
 
@@ -111,13 +111,8 @@ class Modal {
         });
     }
 
-    _show(result) {
+    _show() {
         $(document).find('.wrapper').prepend(this.$el);
-        if (typeof result.script != 'object'){
-            var script = $(result.script);
-            this.$el.append(script);
-            $.globalEval(script.prop('innerHTML'));
-        }
         this.modal = this.$el.modal({
             backdrop: 'static',
             keyboard: false
@@ -193,29 +188,9 @@ function modalForm(href) {
     $.ajax({
         url: href,
         method: 'GET'
-    }).then(function (result) {
-        makeModal(result);
+    }).success(function (result) {
+        modal = new Modal(result);
     }).always(function () {
         pullingModal = false;
     });
-}
-
-function makeModal(result) {
-    result = JSON.parse(result);
-    if (result && validate(result)) {
-        modal = new Modal(result);
-    }
-}
-
-function validate(result) {
-    var valid = true;
-    if (!result.hasOwnProperty('content')) {
-        valid = false;
-        console.error("Result has no 'content' property.");
-    }
-    if (!result.hasOwnProperty('script')) {
-        valid = false;
-        console.error("Result has no 'script' property.");
-    }
-    return valid;
 }

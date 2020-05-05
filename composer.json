@@ -27,7 +27,10 @@
         "laravel": {
             "providers": [
                 "Encore\\ModalForm\\ModalFormServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Modal": "Encore\\ModalForm\\Facades\\Modal"
+            }
         }
     }
 }

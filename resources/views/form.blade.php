@@ -51,4 +51,5 @@
             {!! $form->close() !!}
         </div>
     </div>
+    {!! Modal::script() !!}
 </div>
