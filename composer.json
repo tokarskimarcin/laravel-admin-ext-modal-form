@@ -1,9 +1,9 @@
 {
-    "name": "laravel-admin-ext/modal-form",
+    "name": "tokarskimarcin/laravel-admin-ext-modal-form",
     "description": "Extension allows create modal form",
     "type": "library",
     "keywords": ["laravel-admin", "extension", "modal-form"],
-    "homepage": "https://github.com/laravel-admin-ext/modal-form",
+    "homepage": "https://github.com/tokarskimarcin/laravel-admin-ext-modal-form",
     "license": "MIT",
     "authors": [
         {

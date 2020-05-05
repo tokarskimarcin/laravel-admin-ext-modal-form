@@ -1,4 +1,5 @@
 Modal Form / laravel-admin-extensions
+======
 ![preview](preview.png)
 ## Requires
 - "php": ">=7.2.0",
@@ -19,7 +20,6 @@ Use Encore\ModalForm\Form\ModalButton class to create modal button. In construct
 ```php
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Column;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\Box;
 use Encore\ModalForm\Form\ModalButton;
@@ -62,12 +62,23 @@ $modalButton->getHref();
 ### 2. Form
 Use modal form as regular Admin form
 ```php
- new ModalForm(new Administrator(), function (ModalForm $form){
-    $form->display('id', 'ID');
+use \Encore\ModalForm\Form\ModalForm;
 
+new ModalForm(new Administrator(), function (ModalForm $form){
+    $form->display('id', 'ID');
+    
     //set action for proper submitting
     $form->setAction(route('modal-index-route'));
- }
+});
+```
+
+Or by Modal facade like Admin facade
+```php
+use \Encore\ModalForm\Facades\Modal;
+
+Modal::form(new Administrator(), function (ModalForm $form){
+    ...
+});
 ```
 
 Modal size can be changed:
