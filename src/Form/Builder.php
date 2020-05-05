@@ -5,6 +5,7 @@ namespace Encore\ModalForm\Form;
 
 
 use Encore\Admin\Facades\Admin;
+use Encore\ModalForm\Facades\Modal;
 
 class Builder extends \Encore\Admin\Form\Builder
 {
@@ -30,10 +31,8 @@ class Builder extends \Encore\Admin\Form\Builder
      */
     public function render():string
     {
-        return json_encode([
-            'content' => view($this->view, $this->getData())->render(),
-            'script' => str_replace('data-exec-on-popstate', 'data-exec-on-modal-load', Admin::script()->render())
-        ]);
+        Modal::style(file_get_contents(public_path('/vendor/laravel-admin-ext/modal-form/css/modal-form.css')));
+        return view($this->view, $this->getData())->render();
     }
 
     /**
