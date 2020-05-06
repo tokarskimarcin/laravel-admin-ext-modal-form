@@ -5,6 +5,8 @@ namespace Encore\ModalForm;
 
 use Closure;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 
 /**
  * Class Modal
@@ -17,9 +19,9 @@ class Modal
      * @param bool $deferred
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string|string[]|void
      */
-    public function script($script = '', $deferred = false)
+    public function script($script = '')
     {
-        $script = Admin::script($script, $deferred);
+        $script = Admin::script($script);
         switch (true){
             case $script instanceof \Illuminate\Contracts\View\Factory:
             case $script instanceof \Illuminate\View\View:
@@ -44,5 +46,24 @@ class Modal
     public function form($model, Closure $callable)
     {
         return new Form\ModalForm($this->getModel($model), $callable);
+    }
+
+
+    /**
+     * @param $model
+     *
+     * @return mixed
+     */
+    public function getModel($model)
+    {
+        if ($model instanceof Model) {
+            return $model;
+        }
+
+        if (is_string($model) && class_exists($model)) {
+            return $this->getModel(new $model());
+        }
+
+        throw new InvalidArgumentException("$model is not a valid model");
     }
 }
