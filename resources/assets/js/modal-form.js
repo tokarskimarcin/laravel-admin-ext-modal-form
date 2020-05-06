@@ -14,10 +14,16 @@ class Modal {
         this._handleHide();
     }
 
+    setButton(modalButton){
+        this.$modalButton = modalButton;
+        return this;
+    }
+
     _handleSubmit() {
         var form = this.$el.find('form');
         var that = this;
         form.on('submit', function (e) {
+            that.$modalButton.trigger('modelCreating');
             e.preventDefault();
             that._clearErrors();
             that._disableButtons();
@@ -27,12 +33,16 @@ class Modal {
                 method: form.attr('method'),
                 data: form.serialize()
             }).error((jqXHR, textStatus, errorThrown) => {
+                this.$modalButton.trigger('modelFailed');
                 swal(jqXHR.status.toString(), errorThrown, 'error');
             }).success(function (result) {
                 if(result.status){
                     toastr.success(result.message);
-                    that.remove();
+                    that.$modalButton.data('model-id', result.modelId);
+                    that.$modalButton.trigger('modelCreated');
+                    that.dismiss();
                 }else{
+                    that.$modalButton.trigger('modelValidationFailed');
                     that._handleErrors(result);
                 }
             }).always(function () {
@@ -106,7 +116,7 @@ class Modal {
     _handleHide() {
         var that = this;
         this.modal.on('hidden.bs.modal', function () {
-            that.remove();
+            that.dismiss();
             modal = null;
         });
     }
@@ -119,9 +129,8 @@ class Modal {
         });
     }
 
-    remove() {
-        this.modal.remove();
-        $('.modal-backdrop').remove();
+    dismiss() {
+        this.modal.modal('hide');
     }
     _clearErrors(){
         var formGroups = this.$el.find(".has-error");
@@ -175,21 +184,22 @@ $('a[data-form="modal"]').click(function (e) {
     var modalButton = $(e.target);
     if (!pullingModal) {
         pullingModal = true;
-        modalForm(modalButton.attr('href'))
+        modalForm(modalButton)
     }
 });
 $(document).on('pjax:start', function () {
     if (modal) {
-        modal.remove();
+        modal.dismiss();
     }
 });
 
-function modalForm(href) {
-    $.ajax({
-        url: href,
+function modalForm(modalButton) {
+    return $.ajax({
+        url: modalButton.attr('href'),
         method: 'GET'
     }).success(function (result) {
         modal = new Modal(result);
+        modal.setButton(modalButton);
     }).always(function () {
         pullingModal = false;
     });

@@ -9,6 +9,7 @@ namespace Encore\ModalForm\Form;
 use Closure;
 use Encore\Admin\Form;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 
 /**
@@ -50,5 +51,32 @@ class ModalForm extends Form implements ModalFormInterface
     public function getSize()
     {
         return $this->size;
+    }
+
+    /**
+     * Get ajax response.
+     *
+     * @param string $message
+     *
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
+    protected function ajaxResponse($message)
+    {
+        $request = Request::capture();
+
+        // ajax but not pjax
+        if ($request->ajax() && !$request->pjax()) {
+            return $this->ajaxResponseBody($message);
+        }
+
+        return false;
+    }
+
+    protected function ajaxResponseBody($message){
+        return response()->json([
+            'status'  => true,
+            'modelId' => $this->model->getAttribute($this->model->getKey()),
+            'message' => $message,
+        ]);
     }
 }

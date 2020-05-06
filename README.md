@@ -12,8 +12,8 @@ It will copy vendor resources to your application public directory.
 ~~~
 php artisan vendor:publish --provider="Encore\ModalForm\ModalFormServiceProvider"
 ~~~
-
-
+### Update
+To update assets of package add ```--force``` option to publishing command.
 ## Documentation
 ### 1. Create modal button
 Use Encore\ModalForm\Form\ModalButton class to create modal button. In constructor pass parameters (string $title, string $href)
@@ -89,3 +89,25 @@ $form->medium();
 
 $form->large();
 ```
+
+### 3. JS
+Events are triggered on modal button. 
+
+Button selector: 
+```js
+$('a[data-form="modal"]');
+```
+####Events:
+##### 1. ```modelCreating```
+After modal form submit
+##### 2. ```modelFailed```
+On ajax response error
+##### 3. ```modelValidationFailed```
+On response validation error
+##### 4. ```modelCreated```
+On model creation success. While this events is triggered, model id can be found in button data. Id can be found there until new model is created
+```js
+$('a[data-form="modal"]').on('modelCreated', (e) => {
+    var createdModelId = $(e.target).data('model-id');
+});
+``` 
