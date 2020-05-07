@@ -1,9 +1,7 @@
-let pullingModal = false;
-let modal = null;
-
 class Modal {
     constructor(result) {
         this.$el = $(result);
+        this.id = this.$el.attr('id');
         this.init();
     }
 
@@ -116,22 +114,31 @@ class Modal {
     _handleHide() {
         var that = this;
         this.modal.on('hidden.bs.modal', function () {
-            that.dismiss();
-            modal = null;
+            var index = modals.findIndex((element)=>{
+                return element.id === that.id;
+            });
+            if(index > -1){
+                modals.slice(index, 1);
+            }
+            that.modal.remove();
         });
     }
 
     _show() {
-        $(document).find('.wrapper').prepend(this.$el);
+        this._appendModal();
         this.modal = this.$el.modal({
             backdrop: 'static',
             keyboard: false
         });
     }
+    _appendModal(){
+        $(document).find('header.main-header').before(this.$el);
+    }
 
     dismiss() {
         this.modal.modal('hide');
     }
+
     _clearErrors(){
         var formGroups = this.$el.find(".has-error");
         formGroups.each(function (id, formGroup) {
@@ -179,28 +186,18 @@ class FormInput{
     }
 }
 
-$('a[data-form="modal"]').click(function (e) {
+$('a[data-form="modal"]:not([data-form-event-attached])').each((key, element)=>{
+    var $modalButton = $(element);
+    $modalButton.attr('data-form-event-attached', true);
+}).click(function (e) {
     e.preventDefault();
     var modalButton = $(e.target);
-    if (!pullingModal) {
-        pullingModal = true;
-        modalForm(modalButton)
-    }
-});
-$(document).on('pjax:start', function () {
-    if (modal) {
-        modal.dismiss();
-    }
-});
-
-function modalForm(modalButton) {
-    return $.ajax({
+    $.ajax({
         url: modalButton.attr('href'),
         method: 'GET'
     }).success(function (result) {
-        modal = new Modal(result);
+        var modal = new Modal(result);
+        modals.push(modal);
         modal.setButton(modalButton);
-    }).always(function () {
-        pullingModal = false;
     });
-}
+});
