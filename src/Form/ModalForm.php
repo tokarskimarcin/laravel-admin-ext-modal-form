@@ -21,6 +21,11 @@ class ModalForm extends Form implements ModalFormInterface
     use HasModalSize;
 
     /**
+     * @var string
+     */
+    protected $id;
+
+    /**
      * Size of modal
      * @var string
      */
@@ -34,6 +39,8 @@ class ModalForm extends Form implements ModalFormInterface
     public function __construct($model, Closure $callback = null)
     {
         $this->model = $model;
+
+        $this->setId(\Illuminate\Support\Str::uuid());
 
         $this->builder = new Builder($this);
 
@@ -75,8 +82,27 @@ class ModalForm extends Form implements ModalFormInterface
     protected function ajaxResponseBody($message){
         return response()->json([
             'status'  => true,
-            'modelId' => $this->model->getAttribute($this->model->getKey()),
+            'modelId' => $this->model->getKey(),
             'message' => $message,
         ]);
+    }
+
+
+
+    /**
+     * @param string $id
+     * @return $this
+     */
+    protected function setId(string $id)
+    {
+        $this->id = "$id-modal";
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(){
+        return $this->id;
     }
 }
