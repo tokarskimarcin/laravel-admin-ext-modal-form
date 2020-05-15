@@ -192,12 +192,14 @@ $('a[data-form="modal"]:not([data-form-event-attached])').each((key, element)=>{
 }).click(function (e) {
     e.preventDefault();
     var modalButton = $(e.target);
-    $.ajax({
-        url: modalButton.attr('href'),
-        method: 'GET'
-    }).success(function (result) {
-        var modal = new Modal(result);
-        modals.push(modal);
-        modal.setButton(modalButton);
-    });
+    if(!modalButton.attr('disabled')){
+        $.ajax({
+            url: modalButton.attr('href'),
+            method: 'GET'
+        }).success(function (result) {
+            var modal = new Modal(result);
+            modals.push(modal);
+            modal.setButton(modalButton);
+        });
+    }
 });
