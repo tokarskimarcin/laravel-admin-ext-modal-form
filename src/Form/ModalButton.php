@@ -75,4 +75,13 @@ class ModalButton implements Renderable
     public function getClasses(){
         return $this->getAttribute('class');
     }
+
+    /**
+     * @param bool $disable
+     * @return $this
+     */
+    public function disable(){
+        $this->setAttribute('disabled', true);
+        return $this;
+    }
 }
