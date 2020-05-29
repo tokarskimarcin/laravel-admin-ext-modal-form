@@ -31,7 +31,7 @@ class Modal {
                 method: form.attr('method'),
                 data: form.serialize()
             }).error((jqXHR, textStatus, errorThrown) => {
-                this.$modalButton.trigger('modelFailed');
+                that.$modalButton.trigger('modelFailed');
                 swal(jqXHR.status.toString(), errorThrown, 'error');
             }).success(function (result) {
                 if(result.status){
@@ -57,9 +57,9 @@ class Modal {
                 'position': 'absolute',
                 'top': '50%',
                 'left': '50%',
-                'z-index': '10000'
+                'z-index': '10000',
             }));
-            this.$el.find('.modal-dialog').append(this.$loading);
+            this.$el.find('.modal-dialog .modal-content').append(this.$loading);
         }else{
             if(this.$loading){
                 this.$loading.remove();
