@@ -69,6 +69,7 @@ class Builder extends \Encore\Admin\Form\Builder
         }
 
         return [
+            'id'     => $this->form->getId(),
             'form'   => $this,
             'size'   => $this->form->getSize(),
             'tabObj' => $tabObj,

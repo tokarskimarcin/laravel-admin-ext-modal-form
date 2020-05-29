@@ -17,7 +17,7 @@ trait HasHtmlAttributes
      * @param string $value
      * @return $this
      */
-    protected function addAttribute(string $key, string $value){
+    protected function addAttribute(string $key, $value){
         if (!isset($this->attributes[$key])){
             $this->setAttribute($key, $value);
         }
@@ -30,7 +30,7 @@ trait HasHtmlAttributes
      * @param string $val2
      * @return string
      */
-    private function mergeValues(string $val1, string $val2){
+    private function mergeValues(string $val1, $val2){
         $values = array_merge(
             empty($val1)?[]:explode(' ',$val1),
             empty($val2)?[]:explode(' ',$val2)
@@ -53,7 +53,7 @@ trait HasHtmlAttributes
      * @param string $value
      * @return $this
      */
-    protected function setAttribute(string $key, string $value){
+    protected function setAttribute(string $key, $value){
         $this->attributes[$key] = '';
         $this->addAttribute($key, $value);
         return $this;
@@ -66,6 +66,7 @@ trait HasHtmlAttributes
     protected function formatAttributes(){
         $attributes = [];
         foreach ($this->attributes as $key => $value){
+            $value = $this->convertValue($value);
             $attributes[] = "$key='$value'";
         }
         return implode(' ', $attributes);
@@ -78,5 +79,28 @@ trait HasHtmlAttributes
         foreach (self::DEFAULT_ATTRIBUTES as $ATTRIBUTE => $VALUE){
             $this->setAttribute($ATTRIBUTE, $VALUE);
         }
+    }
+
+    /**
+     * @param string $key
+     * @return $this
+     */
+    protected function removeAttribute(string $key){
+        if(isset($this->attributes[$key])){
+            unset($this->attributes[$key]);
+        }
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function convertValue($value){
+        switch (true){
+            case $value === true: return 'true';
+            case $value === false: return 'false';
+        }
+        return $value;
     }
 }
