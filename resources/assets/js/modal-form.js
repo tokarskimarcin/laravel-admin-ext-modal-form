@@ -29,7 +29,9 @@ class Modal {
             $.ajax({
                 url: form.attr('action'),
                 method: form.attr('method'),
-                data: form.serialize()
+                processData: false,
+                contentType: false,
+                data: new FormData(e.target)
             }).error((jqXHR, textStatus, errorThrown) => {
                 that.$modalButton.trigger('modelFailed');
                 swal(jqXHR.status.toString(), errorThrown, 'error');
